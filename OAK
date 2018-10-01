@@ -1,0 +1,11 @@
+buss switch a number of data that can be processed by
+prosesor in one second / one time
+
+
+Neumann architecture concept (UTS)
+-data instructions are stored in a single read-write memory
+-the content of this memory are addresseable by location, 
+without regard to the type of data contained there
+-execution occurs in a sequantial fashion (unless explicity modified)
+fromone instruction to next
+

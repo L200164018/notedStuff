@@ -11,5 +11,5 @@ LIMIT 10;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #Copy From table
-create table [target];
+create table [target] like [source.table_name];
 insert into [target] select * from [source.table_name];

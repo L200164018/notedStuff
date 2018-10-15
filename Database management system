@@ -23,3 +23,20 @@ order by jumlah desc limit 10;
 #Copy From table
 create table [target] like [source.table_name];
 insert into [target] select * from [source.table_name];
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+delimiter // -> turnoff delimiter
+delimiter ; -> turn on delimiter
+
+create procedure top10()
+begin
+select 
+customers.customerName, SUM(payments.amount) jumlah
+from customers, payments
+where customers.customerNumber = payments.customerNumber
+group by payments.customerNumber
+order by jumlah desc limit 10;
+end
+//
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -9,6 +9,16 @@ ORDER BY sales DESC
 LIMIT 10;
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Membuat view top10
+create view top12 as 
+select 
+customers.customerName, SUM(payments.amount) jumlah
+from customers, payments
+where customers.customerNumber = payments.customerNumber
+group by payments.customerNumber
+order by jumlah desc limit 10;
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #Copy From table
 create table [target] like [source.table_name];

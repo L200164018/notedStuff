@@ -1,0 +1,125 @@
+-week 4--
+
+select customers.customerName, sum(payments.amount) 
+from customers, payments 
+where customers.customerNumber = payments.customerNumber 
+group by customerName
+order by sum(amount) desc
+limit 10;
+
+create view top10 as
+select customers.customerName, payments.amount 
+from customers, payments 
+where customers.customerNumber = payments.customerNumber 
+order by amount desc
+limit 10;
+
+create view top10 as
+select customers.customerName, sum(payments.amount) 
+from customers, payments 
+where customers.customerNumber = payments.customerNumber 
+group by customerName
+order by sum(amount) desc
+limit 10;
+
+
+--week 5--
+
+delimiter // --> mengganti symbol terakhir menjadi //
+
+delimiter //
+create procedure top10()
+begin
+select customers.customerName, sum(payments.amount) 
+from customers, payments 
+where customers.customerNumber = payments.customerNumber 
+group by customerName
+order by sum(amount) desc
+limit 10;
+end //
+
+
+--week 6--
+delimiter $$
+
+create procedure CountOrderByStatus (
+IN orderStatus varchar(25),
+OUT total INT)
+begin 
+select count(orderNUmber)
+into total
+from orders
+where status = orderStatus;
+end $$
+
+delimiter ;
+
+
+delimiter $$
+create procedure get_order_by_cust (
+IN cust_no INT,
+OUT Shipped INT,
+OUT Cancelled INT,
+OUT Resolved INT,
+OUT Disputed INT)
+begin
+select count(*) into Shipped from orders 
+where customerNumber = cust_no
+and status = 'Shipped';
+select count(*) into Cancelled from orders
+where customerNumber = cust_no 
+and status = 'Cancelled';
+select count(*) into Resolved from orders
+where customerNumber = cust_no
+and status = 'Resolved';
+select count(*) into Disputed from orders 
+where customerNumber = cust_no
+and status = 'Disputed';
+end $$ 
+
+delimiter ;
+
+
+--week 7--
+DELIMITER $$
+ 
+CREATE PROCEDURE build_email_list (INOUT email_list varchar(4000))
+BEGIN
+ 
+ DECLARE v_finished INTEGER DEFAULT 0;
+        DECLARE v_email varchar(100) DEFAULT "";
+ 
+ -- declare cursor for employee email
+ DEClARE email_cursor CURSOR FOR 
+ SELECT email FROM employees;
+ 
+ -- declare NOT FOUND handler
+ DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET v_finished = 1;
+ 
+ OPEN email_cursor;
+ 
+ get_email: LOOP
+ 
+ FETCH email_cursor INTO v_email;
+ 
+ IF v_finished = 1 THEN 
+ LEAVE get_email;
+ END IF;
+ 
+ -- build email list
+ SET email_list = CONCAT(v_email,";",email_list);
+ 
+ END LOOP get_email;
+ 
+ CLOSE email_cursor;
+ 
+END$$
+ 
+DELIMITER ;
+
+delimiter ;
+
+SET @email_list = "";
+CALL build_email_list(@email_list);
+SELECT @email_list;
